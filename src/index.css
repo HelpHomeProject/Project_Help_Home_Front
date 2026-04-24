@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 100 20% 98%;
+    --foreground: 200 15% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 200 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 15% 15%;
+
+    --primary: 90 65% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 25% 30%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 100 15% 93%;
+    --muted-foreground: 200 10% 45%;
+
+    --accent: 75 70% 48%;
+    --accent-foreground: 200 15% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 100 12% 88%;
+    --input: 100 12% 88%;
+    --ring: 90 65% 42%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 90 65% 42%;
+  }
+
+  .dark {
+    --background: 200 15% 8%;
+    --foreground: 100 15% 95%;
+
+    --card: 200 15% 11%;
+    --card-foreground: 100 15% 95%;
+
+    --popover: 200 15% 11%;
+    --popover-foreground: 100 15% 95%;
+
+    --primary: 90 65% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 20% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 200 10% 18%;
+    --muted-foreground: 100 10% 60%;
+
+    --accent: 75 70% 48%;
+    --accent-foreground: 200 15% 10%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 10% 20%;
+    --input: 200 10% 20%;
+    --ring: 90 65% 42%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 90 65% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 90 65% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Quicksand', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Nunito', sans-serif;
+  }
+}
