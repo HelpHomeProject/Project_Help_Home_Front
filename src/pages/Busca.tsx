@@ -1,10 +1,11 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, MapPin, Tag, SlidersHorizontal, Star, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -33,14 +34,33 @@ const MOCK_PROFESSIONALS = [
 
 type SortOption = "rating" | "reviews" | "name";
 
+const [professionals, setProfessionals] = useState(MOCK_PROFESSIONALS);
+
+const { data } = await supabase
+  .from("professionals")
+  .select("*");
+
+  data.map(pro => ({
+  id: pro.id,
+  name: "Profissional",
+  categoria: pro.category,
+  cidade: pro.city,
+  estado: pro.state,
+  rating: pro.average_rating,
+  bio: pro.bio
+}))
+
 const Busca = () => {
   const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [categoria, setCategoria] = useState("Todas");
   const [cidade, setCidade] = useState("Todas");
   const [sortBy, setSortBy] = useState<SortOption>("rating");
   const [showFilters, setShowFilters] = useState(false);
   const [visibleCount, setVisibleCount] = useState(6);
+
+  const [realProfessionals, setRealProfessionals] = useState([]);
 
   const filtered = useMemo(() => {
     let list = MOCK_PROFESSIONALS;

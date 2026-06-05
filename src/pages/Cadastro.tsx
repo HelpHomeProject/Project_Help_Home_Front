@@ -1,15 +1,18 @@
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, User, Phone, Eye, EyeOff, Briefcase, UserCheck, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/components/ui/use-toast";
 import Header from "@/components/Header";
 
 type AccountType = "contratante" | "profissional" | null;
 
 const Cadastro = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [accountType, setAccountType] = useState<AccountType>(null);
   const [showPass, setShowPass] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" });
@@ -46,22 +49,55 @@ const Cadastro = () => {
     return e;
   };
 
-  const handleSubmit = (ev: React.FormEvent) => {
-    ev.preventDefault();
-    const newErrors = validate();
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      if (accountType === "profissional") {
-        navigate("/onboarding");
-      } else {
-        navigate("/busca");
-      }
-    }, 1200);
-  };
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+
+  console.log("Tentando cadastrar...");
+
+  try {
+    // 1. Cadastra o usuário no sistema de autenticação do Supabase
+    const { data, error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+    });
+
+console.log("DATA:", data);
+console.log("ERROR:", error);
+
+    if (error) throw error;
+
+    if (data.user) {
+      // 2. Insere os dados dele na nossa tabela 'profiles' que acabamos de ajeitar
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert([{ id: data.user.id }]);
+
+      if (profileError) throw profileError;
+
+      toast({
+        title: "Cadastro realizado!",
+        description: "Conta criada com sucesso. Redirecionando...",
+      });
+      
+      // Vai direto para o onboarding completar o perfil
+      navigate("/onboarding");
+    }
+  } catch (error: any) {
+  console.log("CATCH COMPLETO:", error);
+  console.log("MENSAGEM:", error?.message);
+
+  toast({
+    variant: "destructive",
+    title: "Erro ao cadastrar",
+    description: error.message || "Verifique os dados informados.",
+  });
+} finally {
+    setLoading(false);
+  }
+};
 
   const ErrorMsg = ({ msg }: { msg?: string }) => (
     <AnimatePresence>
